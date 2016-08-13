@@ -1,6 +1,6 @@
 # CSharp-Mvc-Blog-Project
 
-Practical Project Assignment for the Software Technologies Course @ https://softuni.bg/
+Practical Project Assignment for the <a href="https://softuni.bg/trainings/1390/software-technologies-june-2016">Software Technologies Course</a> @ https://softuni.bg/
 
 Main Technology: C# + ASP.NET MVC + Entity Framework + SQL Server + HTML + CSS
 
