@@ -26,3 +26,8 @@ textarea {
 img.logo{
     padding-top:15px;
 }
+
+p.read-more{
+    padding-left:190px; 
+    padding-right:30px;
+}
