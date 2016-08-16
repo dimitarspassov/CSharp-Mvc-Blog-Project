@@ -12,7 +12,5 @@ namespace MvcBlog.Controllers
         {
             return View();
         }
-
-
     }
 }
