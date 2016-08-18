@@ -2,6 +2,11 @@
     ViewBag.Title = "Home Page";
 }
 
+@using MvcBlog.Classes;
+@model List<MvcBlog.Models.Post>
+
+
+
     <div>
         <img src="~/Content/img/background.jpg" />
     </div>
@@ -14,83 +19,47 @@
                     <div class="sidebar-module">
                         <h4 style="text-align:left">Categories</h4>
                         <ul class="list-group">
-                            <li class="list-group-item" style="width:170px">
-                                C#
-                            </li>
-                            <li class="list-group-item" style="width:170px">
-                                Java
-                            </li>
-                            <li class="list-group-item" style="width:170px">
-                                Php
-                            </li>
-
+                            @foreach (var category in ViewBag.Categories)
+                            {
+                                <li class="list-group-item" style="width:170px">@category.Name</li>
+                            }                  
                         </ul>
                     </div>
                 </div>
             </div>
     
         <div class="col-md-4" style="padding-left:20px; padding-right:100px">
-            <div class="panel panel-primary" style="width:500px; height:215px">
-                <div class="panel-heading">
-                    <h2 class="panel-title">First&nbsp;post</h2>
-                </div>
-                    <div class="panel-body">
-                        <p>
-                            This is the content of the first post
-                            This is the content of the first post
-                            This is the content of the first post
-                            This is the content of the first post
-                        </p>
+            
+            @foreach (var post in Model)
+            {
+                <div class="panel panel-primary" style="width:500px; height:275px">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">@post.Title</h2>
                     </div>
-                <p class="read-more"><a class="btn btn-default" href="/">Read more &raquo;</a></p>
-            </div>
+                    <div class="panel-body">
 
-            <div class="panel panel-primary" style="width:500px; height:215px">
-                <div class="panel-heading">
-                    <h2 class="panel-title">Second&nbsp;post</h2>
-                </div>
-                <div class="panel-body">
-                    <p>
-                        This is the content of the second post
-                        This is the content of the second post
-                        This is the content of the second post
-                        This is the content of the second post
-                    </p>
-                </div>
-                <p class="read-more"><a class="btn btn-default" href="/">Read more &raquo;</a></p>
-            </div>
+                        <ul class="breadcrumb">
+                            <li class="active">Posted on: @post.Date</li>     
+                            <li class="active">Author: @post.AuthorName</li>                       
+                        </ul>
 
-            <div class="panel panel-primary" style="width:500px; height:215px">
-                <div class="panel-heading">
-                    <h2 class="panel-title">Third&nbsp;post</h2>
+                        <p>@Utils.CutText(post.Body)</p>
+                    </div>
+                    <p class="read-more"><a class="btn btn-default" href="/Posts/Details/@post.Id"> Read more&raquo;</a></p>
                 </div>
-                <div class="panel-body">
-                    <p>
-                        This is the content of the third post
-                        This is the content of the third post
-                        This is the content of the third post
-                        This is the content of the third post
-                    </p>
-                </div>
-                <p class="read-more"><a class="btn btn-default" href="/">Read more &raquo;</a></p>
-            </div>
-
+            }
+           
         </div>
 
-        <div class="col-md-4" style="float:right; width:300px">
+        <div class="col-md-4" style="float:right; width:350px">
             <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
                 <div class="sidebar-module">
-                    <h4 style="padding-left:75px; padding-right:10px;">Top&nbsp;posts</h4>
+                    <h4 style="padding-left:105px; padding-right:5px;">Top&nbsp;posts</h4>
                     <ul class="list-group">
-                        <li class="list-group-item" style="width:170px">
-                            Top post
-                        </li>
-                        <li class="list-group-item" style="width:170px">
-                          Second
-                        </li>
-                        <li class="list-group-item" style="width:170px">
-                            Third
-                        </li>
+                        @foreach (var post in ViewBag.TopPosts)
+                        {
+                            <li class="list-group-item" style="width:270px">@post.Title</li>
+                        }                      
                     </ul>
                 </div>
             </div>

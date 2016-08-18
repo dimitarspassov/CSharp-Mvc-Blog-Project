@@ -73,6 +73,7 @@ namespace MvcBlog.Controllers
                 }
                
                 post.Author = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+                post.AuthorName = post.Author.FullName;
                 db.Posts.Add(post);
                 db.SaveChanges();
                 return RedirectToAction("Index");

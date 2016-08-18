@@ -35,6 +35,8 @@ namespace MvcBlog.Models
 
         public string Category { get; set; }
 
+        public string AuthorName { get; set; }
+
         public virtual ICollection<Comment> Comments { get; set; }
     }
 }

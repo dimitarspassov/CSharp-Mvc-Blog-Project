@@ -9,10 +9,18 @@ namespace MvcBlog.Controllers
 {
     public class HomeController : Controller
     {
+        private ApplicationDbContext db = new ApplicationDbContext();
+
         public ActionResult Index()
         {
-            var db = new ApplicationDbContext();
-            return View();
+            var posts = db.Posts.OrderByDescending(p => p.Date).Take(5);
+
+            List<Category> allCategories = db.Categories.ToList();
+            ViewBag.Categories = allCategories;
+
+            List<Post> topFivePosts = db.Posts.OrderByDescending(p => p.Visits).Take(5).ToList();
+            ViewBag.TopPosts = topFivePosts;
+            return View(posts.ToList());        
         }
     }
 }
