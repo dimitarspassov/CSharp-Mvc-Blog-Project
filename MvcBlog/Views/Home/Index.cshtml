@@ -5,8 +5,6 @@
 @using MvcBlog.Classes;
 @model List<MvcBlog.Models.Post>
 
-
-
     <div>
         <img src="~/Content/img/background.jpg" />
     </div>
@@ -21,7 +19,7 @@
                         <ul class="list-group">
                             @foreach (var category in ViewBag.Categories)
                             {
-                                <li class="list-group-item" style="width:170px">@category.Name</li>
+                                <li class="list-group-item" style="width:170px"><a href="/Posts/List?categorySelected=@category.Name">@category.Name</a></li>
                             }                  
                         </ul>
                     </div>
@@ -58,7 +56,7 @@
                     <ul class="list-group">
                         @foreach (var post in ViewBag.TopPosts)
                         {
-                            <li class="list-group-item" style="width:270px">@post.Title</li>
+                            <li class="list-group-item" style="width:270px"><a  href="/Posts/Details/@post.Id">@post.Title</a></li>
                         }                      
                     </ul>
                 </div>

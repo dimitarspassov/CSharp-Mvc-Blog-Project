@@ -20,6 +20,29 @@ namespace MvcBlog.Controllers
             return View(db.Posts.ToList());
         }
 
+        public ActionResult List(string categorySelected)
+        {
+            List<Post> postsByCategory;
+            if (categorySelected == null)
+            {
+               postsByCategory = db.Posts.ToList();
+            }
+            else
+            {
+                postsByCategory = db.Posts.Where(p => p.Category == categorySelected).ToList();
+            }
+            
+            List<Category> allCategories = db.Categories.ToList();
+            ViewBag.Categories = allCategories;
+
+            List<Post> topFivePosts = db.Posts.OrderByDescending(p => p.Visits).Take(5).ToList();
+            ViewBag.TopPosts = topFivePosts;
+
+            return View(postsByCategory);
+        }
+
+       
+
         // GET: Posts/Details/5
         public ActionResult Details(int? id)
         {
@@ -38,6 +61,9 @@ namespace MvcBlog.Controllers
             post.Visits = currentVisits;
             db.Entry(post).State = EntityState.Modified;
             db.SaveChanges();
+
+            int postId = post.Id;
+            ViewBag.Id = postId;
             return View(post);
         }
 

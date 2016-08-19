@@ -1,0 +1,64 @@
+﻿@using MvcBlog.Classes;
+@model List<MvcBlog.Models.Post>
+
+
+
+<div>
+    <img src="~/Content/img/background.jpg" />
+</div>
+<br />
+
+<div class="row">
+
+    <div class="col-md-4" style="float:left; width:300px">
+        <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
+            <div class="sidebar-module">
+                <h4 style="text-align:left">Categories</h4>
+                <ul class="list-group">
+                    @foreach (var category in ViewBag.Categories)
+                    {
+                        <li class="list-group-item" style="width:170px"><a href="/Posts/List?categorySelected=@category.Name">@category.Name</a></li>
+                    }
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4" style="padding-left:20px; padding-right:100px">
+
+        @foreach (var post in Model)
+            {
+            <div class="panel panel-primary" style="width:500px; height:275px">
+                <div class="panel-heading">
+                    <h2 class="panel-title">@post.Title</h2>
+                </div>
+                <div class="panel-body">
+
+                    <ul class="breadcrumb">
+                        <li class="active">Posted on: @post.Date</li>
+                        <li class="active">Author: @post.AuthorName</li>
+                    </ul>
+
+                    <p>@Utils.CutText(post.Body)</p>
+                </div>
+                <p class="read-more"><a class="btn btn-default" href="/Posts/Details/@post.Id"> Read more&raquo;</a></p>
+            </div>
+        }
+
+    </div>
+
+    <div class="col-md-4" style="float:right; width:350px">
+        <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
+            <div class="sidebar-module">
+                <h4 style="padding-left:105px; padding-right:5px;">Top&nbsp;posts</h4>
+                <ul class="list-group">
+                    @foreach (var post in ViewBag.TopPosts)
+                    {
+                        <li class="list-group-item" style="width:270px"><a href="/Posts/Details/@post.Id">@post.Title</a></li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

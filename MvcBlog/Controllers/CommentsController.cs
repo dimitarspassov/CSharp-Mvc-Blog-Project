@@ -46,8 +46,9 @@ namespace MvcBlog.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Body,PostId")] Comment comment)
+        public ActionResult Create([Bind(Include = "Id,Body")] Comment comment, int postId)
         {
+            comment.PostId = postId;
             if (ModelState.IsValid)
             {
                 comment.Author = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
