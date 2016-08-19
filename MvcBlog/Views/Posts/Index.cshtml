@@ -4,6 +4,8 @@
     ViewBag.Title = "Index";
 }
 
+@using MvcBlog.Classes;
+
 <h2>Index</h2>
 
 <p>
@@ -35,7 +37,7 @@
             @Html.DisplayFor(modelItem => item.Title)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Body)
+            @Utils.CutText(item.Body)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Date)

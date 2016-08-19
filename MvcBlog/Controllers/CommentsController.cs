@@ -46,12 +46,14 @@ namespace MvcBlog.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Body")] Comment comment, int postId)
+        public ActionResult Create([Bind(Include = "Id,Body")] Comment comment, int? id)
         {
-            comment.PostId = postId;
+
             if (ModelState.IsValid)
             {
                 comment.Author = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+                comment.AuthorName = comment.Author.FullName;
+                comment.PostId = (int)id;
                 db.Comments.Add(comment);
                 db.SaveChanges();
                 return RedirectToAction("Index");

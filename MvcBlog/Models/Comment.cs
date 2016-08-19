@@ -24,7 +24,8 @@ namespace MvcBlog.Models
 
         public ApplicationUser Author { get; set; }
 
-        [Required]
-        public int PostId { get; set; }    
+        public int PostId { get; set; }
+
+        public string AuthorName { get; set; }
     }
 }

@@ -64,6 +64,18 @@ namespace MvcBlog.Controllers
 
             int postId = post.Id;
             ViewBag.Id = postId;
+
+            List<Comment>postComments = new List<Comment>();
+
+            foreach (var comment in db.Comments)
+            {
+                if (postId == comment.PostId)
+                {
+                    postComments.Add(comment);
+                }
+            }
+            postComments = postComments.OrderByDescending(c => c.Date).ToList();
+            ViewBag.Comments = postComments;
             return View(post);
         }
 
