@@ -19,13 +19,13 @@
             <li class="active">Author: @Html.DisplayFor(model=>model.AuthorName)</li>
             <li class="active">Added: @Html.DisplayFor(model => model.Date)</li>
             <li class="active">Visits: @Html.DisplayFor(model => model.Visits)</li>
-            <li class="active">Category: @Html.DisplayFor(model => model.Category)</li>
+            <li class="active">Category:<a a href="/Posts/List?categorySelected=@Model.Category"> @Model.Category.ToUpper()</a></li>
         </ul>
 
         <div class="progress" style="height:10px">
             <div class="progress-bar" style="width: 100%;"></div>
         </div>
-            <p>@Html.DisplayFor(model => model.Body)</p>
+            <p>@Html.DisplayFor(model=>model.Body)</p>
     </div>
 
     <div class="progress" style="height:10px">

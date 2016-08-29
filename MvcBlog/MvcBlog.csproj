@@ -189,6 +189,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\img\background.jpg" />
+    <Content Include="Content\img\binary.jpg" />
     <Content Include="Content\img\icon.png" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />

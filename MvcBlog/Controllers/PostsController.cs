@@ -10,14 +10,35 @@ using MvcBlog.Models;
 
 namespace MvcBlog.Controllers
 {
+
     public class PostsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Posts
+        [Authorize]
         public ActionResult Index()
         {
-            return View(db.Posts.ToList());
+            List<Post> posts = new List<Post>();
+            var author = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+            if (User.IsInRole("Administrator"))
+            {
+                return View(db.Posts.ToList());
+            }
+            else
+            {
+                string currentUser = User.Identity.Name;
+                foreach (var post in db.Posts)
+                {
+                    if (post.Author == author)
+                    {
+                        posts.Add(post);
+                    }
+
+
+                }
+                return View(posts);
+            }
         }
 
         public ActionResult List(string categorySelected)
@@ -80,6 +101,7 @@ namespace MvcBlog.Controllers
         }
 
         // GET: Posts/Create
+        [Authorize]
         public ActionResult Create()
         {
             return View();
@@ -89,6 +111,7 @@ namespace MvcBlog.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Title,Body,Visits,Category")] Post post)
         {
@@ -121,6 +144,7 @@ namespace MvcBlog.Controllers
         }
 
         // GET: Posts/Edit/5
+        [Authorize]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -139,6 +163,7 @@ namespace MvcBlog.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Title,Body,Date,Visits,Category")] Post post)
         {
@@ -152,6 +177,7 @@ namespace MvcBlog.Controllers
         }
 
         // GET: Posts/Delete/5
+        [Authorize]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -167,6 +193,7 @@ namespace MvcBlog.Controllers
         }
 
         // POST: Posts/Delete/5
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
