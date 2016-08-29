@@ -32,7 +32,10 @@
         <div class="progress-bar" style="width: 100%;"></div>
     </div>
     <div style="padding-left:470px; padding-right:10px;">
-        <a href="#" class="btn btn-info">Edit</a>
+        @if(User.Identity.IsAuthenticated && ViewBag.EditAvailable)
+        {
+        <a href="/Posts/Edit/@ViewBag.Id" class="btn btn-info">Edit</a>
+        }
     <a href="/Comments/Create/@ViewBag.Id" class="btn btn-warning">Add comment</a>
     </div>
   
@@ -52,9 +55,4 @@
         }
       
     </div>
-
-    <p>
-        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-        @Html.ActionLink("All posts", "Index")
-    </p>
 </div>

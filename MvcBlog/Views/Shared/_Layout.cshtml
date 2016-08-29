@@ -28,6 +28,8 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                     <li>@Html.ActionLink("My Posts", "Index", "Posts")</li>
+                    <li>@Html.ActionLink("Create New", "Create", "Posts")</li>
+
                     }
                                                                   
                 </ul>

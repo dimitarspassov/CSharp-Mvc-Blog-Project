@@ -86,7 +86,15 @@ namespace MvcBlog.Controllers
             int postId = post.Id;
             ViewBag.Id = postId;
 
-            List<Comment>postComments = new List<Comment>();
+            var author = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+            bool editAvailable = false;
+            if (post.Author == author)
+            {
+                editAvailable =true;
+            }
+            ViewBag.EditAvailable = editAvailable;
+
+                List<Comment>postComments = new List<Comment>();
 
             foreach (var comment in db.Comments)
             {
@@ -156,6 +164,15 @@ namespace MvcBlog.Controllers
             {
                 return HttpNotFound();
             }
+
+            var author = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+            if (post.Author != author)
+            {
+                if (!User.IsInRole("Administrator"))
+                {
+                    return HttpNotFound();
+                }
+            }
             return View(post);
         }
 
@@ -188,6 +205,14 @@ namespace MvcBlog.Controllers
             if (post == null)
             {
                 return HttpNotFound();
+            }
+            var author = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+            if (post.Author != author)
+            {
+                if (!User.IsInRole("Administrator"))
+                {
+                    return HttpNotFound();
+                }          
             }
             return View(post);
         }
