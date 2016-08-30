@@ -46,11 +46,11 @@ namespace MvcBlog.Controllers
             List<Post> postsByCategory;
             if (categorySelected == null)
             {
-               postsByCategory = db.Posts.ToList();
+               postsByCategory = db.Posts.OrderByDescending(p=>p.Date).ToList();
             }
             else
             {
-                postsByCategory = db.Posts.Where(p => p.Category == categorySelected).ToList();
+                postsByCategory = db.Posts.Where(p => p.Category == categorySelected).OrderByDescending(p => p.Date).ToList();
             }
             
             List<Category> allCategories = db.Categories.ToList();
@@ -61,8 +61,6 @@ namespace MvcBlog.Controllers
 
             return View(postsByCategory);
         }
-
-       
 
         // GET: Posts/Details/5
         public ActionResult Details(int? id)
@@ -93,6 +91,7 @@ namespace MvcBlog.Controllers
                 editAvailable =true;
             }
             ViewBag.EditAvailable = editAvailable;
+
 
                 List<Comment>postComments = new List<Comment>();
 
@@ -184,8 +183,19 @@ namespace MvcBlog.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Title,Body,Date,Visits,Category")] Post post)
         {
+
             if (ModelState.IsValid)
             {
+                var author = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+                if(User.IsInRole("Administrator"))
+                {
+                    post.AuthorName = "Last edited by " + author.FullName;
+                }
+                else
+                {
+                    post.AuthorName = author.FullName;
+                }
+            
                 db.Entry(post).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");

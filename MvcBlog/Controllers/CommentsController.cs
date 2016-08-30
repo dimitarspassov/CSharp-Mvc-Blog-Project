@@ -46,6 +46,7 @@ namespace MvcBlog.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Body")] Comment comment, int? id)
         {
@@ -57,7 +58,7 @@ namespace MvcBlog.Controllers
                 comment.PostId = (int)id;
                 db.Comments.Add(comment);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return Redirect("~/Posts/Details/" + comment.PostId);
             }
 
             return View(comment);
@@ -85,7 +86,7 @@ namespace MvcBlog.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Body,Date,PostId")] Comment comment)
+        public ActionResult Edit([Bind(Include = "Id,Body,PostId")] Comment comment)
         {
             if (ModelState.IsValid)
             {
