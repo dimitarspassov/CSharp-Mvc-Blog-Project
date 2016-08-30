@@ -49,8 +49,15 @@
                     <li class="active">Author:@c.AuthorName</li>
                     <li class="active">Posted on: @c.Date</li>
                 </ul>
-                <p class="list-group-item-text">@c.Body</p>              
+                <p class="list-group-item-text">@c.Body</p>            
             </a>
+
+           if (c.AuthorName == ViewBag.CurrentUser||ViewBag.Admin)
+                {
+                <a href="~/Comments/Edit/@c.Id"  class="btn btn-primary btn-xs">Edit</a>
+                <a href="~/Comments/Delete/@c.Id" class="btn btn-primary btn-xs">Delete</a>
+            }
+            <br />
             <br />
         }     
     </div>

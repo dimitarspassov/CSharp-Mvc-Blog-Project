@@ -92,6 +92,19 @@ namespace MvcBlog.Controllers
             }
             ViewBag.EditAvailable = editAvailable;
 
+            if (author != null)
+            {
+                ViewBag.CurrentUser = author.FullName;
+            }
+
+            if (User.IsInRole("Administrator"))
+            {
+                ViewBag.Admin = true;
+            }
+            else
+            {
+                ViewBag.Admin = false;
+            }
 
                 List<Comment>postComments = new List<Comment>();
 

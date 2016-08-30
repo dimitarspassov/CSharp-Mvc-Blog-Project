@@ -17,22 +17,16 @@ namespace MvcBlog.Controllers
         // GET: Comments
         public ActionResult Index()
         {
-            return View(db.Comments.ToList());
-        }
-
-        // GET: Comments/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
+            List<Comment> comments = new List<Comment>();
+            var author = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+            if (User.IsInRole("Administrator"))
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return View(db.Comments.ToList());
             }
-            Comment comment = db.Comments.Find(id);
-            if (comment == null)
+            else
             {
-                return HttpNotFound();
+                return Redirect("/");
             }
-            return View(comment);
         }
 
         // GET: Comments/Create
@@ -77,6 +71,15 @@ namespace MvcBlog.Controllers
             {
                 return HttpNotFound();
             }
+
+            var author = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+            if (comment.Author != author)
+            {
+                if (!User.IsInRole("Administrator"))
+                {
+                    return HttpNotFound();
+                }
+            }
             return View(comment);
         }
 
@@ -90,9 +93,18 @@ namespace MvcBlog.Controllers
         {
             if (ModelState.IsValid)
             {
+                var author = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+                if (User.IsInRole("Administrator"))
+                {
+                    comment.AuthorName = "Last edited by " + author.FullName;
+                }
+                else
+                {
+                    comment.AuthorName = author.FullName;
+                }
                 db.Entry(comment).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return Redirect("~/Posts/Details/" + comment.PostId);
             }
             return View(comment);
         }
@@ -109,6 +121,14 @@ namespace MvcBlog.Controllers
             if (comment == null)
             {
                 return HttpNotFound();
+            }
+            var author = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+            if (comment.Author != author)
+            {
+                if (!User.IsInRole("Administrator"))
+                {
+                    return HttpNotFound();
+                }
             }
             return View(comment);
         }
