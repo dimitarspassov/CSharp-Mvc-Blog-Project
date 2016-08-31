@@ -234,7 +234,7 @@ namespace MvcBlog.Controllers
             
                 db.Entry(post).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return Redirect("~/Posts/Details/" + post.Id);
             }
             return View(post);
         }

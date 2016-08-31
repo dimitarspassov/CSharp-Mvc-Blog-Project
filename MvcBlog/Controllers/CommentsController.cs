@@ -153,7 +153,7 @@ namespace MvcBlog.Controllers
             Comment comment = db.Comments.Find(id);
             db.Comments.Remove(comment);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return Redirect("~/Posts/Details/" + comment.PostId);
         }
 
         protected override void Dispose(bool disposing)
