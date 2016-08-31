@@ -175,7 +175,7 @@ namespace MvcBlog.Controllers
                 post.AuthorName = post.Author.FullName;
                 db.Posts.Add(post);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("/Details/" + post.Id);
             }
 
             return View(post);
