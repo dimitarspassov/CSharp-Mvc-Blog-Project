@@ -32,7 +32,7 @@
         <div class="progress-bar" style="width: 100%;"></div>
     </div>
     <div style="padding-left:470px; padding-right:10px;">
-        @if(User.Identity.IsAuthenticated && ViewBag.EditAvailable)
+        @if((User.Identity.IsAuthenticated && ViewBag.EditAvailable) || ViewBag.Admin)
         {
         <a href="/Posts/Edit/@ViewBag.Id" class="btn btn-info">Edit</a>
         }

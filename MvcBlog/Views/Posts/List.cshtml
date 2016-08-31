@@ -1,7 +1,8 @@
-﻿@using MvcBlog.Classes;
-@model List<MvcBlog.Models.Post>
+﻿
+@using MvcBlog.Classes;
+@using PagedList.Mvc;
 
-
+@model PagedList.IPagedList<MvcBlog.Models.Post>
 
 <div>
     <img src="~/Content/img/binary.jpg" />
@@ -44,9 +45,13 @@
                 </div>
                 <p class="read-more"><a class="btn btn-default" href="/Posts/Details/@post.Id"> Read more&raquo;</a></p>
             </div>
-        }
+            }
 
+      @Html.PagedListPager(Model, page=>Url.Action("List",
+     new { page, pageSize=Model.PageSize}))
     </div>
+
+
 
     <div class="col-md-4" style="float:right; width:350px">
         <div class="col-sm-3 col-sm-offset-1 blog-sidebar">

@@ -15,8 +15,11 @@ namespace MvcBlog.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Comments
+        [Authorize]
         public ActionResult Index()
         {
+            //Comments index view is only available for the Administrator. Users can edit/delete their own comments, 
+            //but they do not need to see a page with all existing comments for each of the posts.
             List<Comment> comments = new List<Comment>();
             var author = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
             if (User.IsInRole("Administrator"))
@@ -47,6 +50,8 @@ namespace MvcBlog.Controllers
 
             if (ModelState.IsValid)
             {
+                //It is neccessary to add comment.Author, comment.AuthorName and comment.PostId, because they are not binded
+                //Moreover the return statement must redirect back to the post, which is commented. Here comes the Post.Id
                 comment.Author = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
                 comment.AuthorName = comment.Author.FullName;
                 comment.PostId = (int)id;
@@ -72,6 +77,7 @@ namespace MvcBlog.Controllers
                 return HttpNotFound();
             }
 
+            //Edit available only for Administrator/author of comment
             var author = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
             if (comment.Author != author)
             {
@@ -93,6 +99,9 @@ namespace MvcBlog.Controllers
         {
             if (ModelState.IsValid)
             {
+                //After edit, the comment's AuthorName is not binded. Therefore the Authorname is added here after validation.
+                //Because a comment can be edited only by author or admin, the AuthorName ramains the same or if edited by admin,
+                //the AuthorName is set to "Last edited by" + author.FullName (admin).              
                 var author = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
                 if (User.IsInRole("Administrator"))
                 {
@@ -122,6 +131,8 @@ namespace MvcBlog.Controllers
             {
                 return HttpNotFound();
             }
+
+            //Delete available only for Administrator/author of comment
             var author = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
             if (comment.Author != author)
             {

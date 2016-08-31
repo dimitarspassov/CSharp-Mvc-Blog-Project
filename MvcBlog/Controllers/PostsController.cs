@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using MvcBlog.Models;
+using PagedList;
 
 namespace MvcBlog.Controllers
 {
@@ -19,6 +20,7 @@ namespace MvcBlog.Controllers
         [Authorize]
         public ActionResult Index()
         {
+            //Shows all posts for the Administrator or shows posts of the current user
             List<Post> posts = new List<Post>();
             var author = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
             if (User.IsInRole("Administrator"))
@@ -41,8 +43,10 @@ namespace MvcBlog.Controllers
             }
         }
 
-        public ActionResult List(string categorySelected)
+        public ActionResult List(string categorySelected, int page = 1, int pageSize = 4)
         {
+            //Lists the posts by selected category, then orders them by date descending
+      
             List<Post> postsByCategory;
             if (categorySelected == null)
             {
@@ -53,18 +57,25 @@ namespace MvcBlog.Controllers
                 postsByCategory = db.Posts.Where(p => p.Category == categorySelected).OrderByDescending(p => p.Date).ToList();
             }
             
+            //All categories to be displayed in the sidebar
             List<Category> allCategories = db.Categories.ToList();
             ViewBag.Categories = allCategories;
 
+            //Top five posts to be displayed in the sidebar
             List<Post> topFivePosts = db.Posts.OrderByDescending(p => p.Visits).Take(5).ToList();
             ViewBag.TopPosts = topFivePosts;
 
-            return View(postsByCategory);
+            //Posts are put in a paged list in order to display them with pagination
+            PagedList<Post> pagedPosts = new PagedList<Post>(postsByCategory, page, pageSize);
+          
+            return View(pagedPosts);
         }
 
         // GET: Posts/Details/5
         public ActionResult Details(int? id)
         {
+            //Displays the post like an article with comments below
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -75,15 +86,18 @@ namespace MvcBlog.Controllers
                 return HttpNotFound();
             }
 
+            //Simple logic to increment the visits for current post
             int currentVisits = post.Visits;
             currentVisits++;
             post.Visits = currentVisits;
             db.Entry(post).State = EntityState.Modified;
             db.SaveChanges();
 
+            //Post's id should be send to the view for creating the hyperlink for edit/add comment
             int postId = post.Id;
             ViewBag.Id = postId;
 
+            //Extracting the current user to check whether he is the admin/author of the post. If true, post can be edited.
             var author = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
             bool editAvailable = false;
             if (post.Author == author)
@@ -92,6 +106,8 @@ namespace MvcBlog.Controllers
             }
             ViewBag.EditAvailable = editAvailable;
 
+            //Some logic for the comments section under the post. If the current user is the author of any of the comments
+            //or if the current user is Administrator, he can edit/delete them. 
             if (author != null)
             {
                 ViewBag.CurrentUser = author.FullName;
@@ -106,7 +122,8 @@ namespace MvcBlog.Controllers
                 ViewBag.Admin = false;
             }
 
-                List<Comment>postComments = new List<Comment>();
+            //Extracting all comments for the current post
+            List<Comment>postComments = new List<Comment>();
 
             foreach (var comment in db.Comments)
             {
@@ -137,8 +154,8 @@ namespace MvcBlog.Controllers
         {
             if (ModelState.IsValid)
             {
+                //Adding the category of the newly created post to database set of all categories
                 Category category = new Category { Name = post.Category.ToUpper()};
-
                 bool exists = false;
                 foreach (Category c in db.Categories)
                 {
@@ -153,6 +170,7 @@ namespace MvcBlog.Controllers
                     db.Categories.Add(category);
                 }
                
+                //Adding post author
                 post.Author = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
                 post.AuthorName = post.Author.FullName;
                 db.Posts.Add(post);
@@ -177,6 +195,7 @@ namespace MvcBlog.Controllers
                 return HttpNotFound();
             }
 
+            //Edit available only for admin/author of current post
             var author = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
             if (post.Author != author)
             {
@@ -199,6 +218,10 @@ namespace MvcBlog.Controllers
 
             if (ModelState.IsValid)
             {
+                //After edit, the post's author is not binded. Therefore the author is added here after validation.
+                //Because a post can be edited only by author or admin, the AuthorName ramains the same or if edited by admin,
+                //the AuthorName is set to "Last edited by" + author.FullName (admin).
+                //However the author of current post remains the same. AuthorName is a property only to be displayed in some cases like Details.
                 var author = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
                 if(User.IsInRole("Administrator"))
                 {
@@ -229,6 +252,8 @@ namespace MvcBlog.Controllers
             {
                 return HttpNotFound();
             }
+
+            //Delete available only for admin/author of current post
             var author = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
             if (post.Author != author)
             {

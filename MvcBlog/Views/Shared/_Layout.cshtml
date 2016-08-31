@@ -31,9 +31,12 @@
                     {
                     <li>@Html.ActionLink("My Posts", "Index", "Posts")</li>
                     <li>@Html.ActionLink("New Post", "Create", "Posts")</li>
-
                     }
-                                                                  
+                    @if (User.IsInRole("Administrator"))
+                    {
+                        <li>@Html.ActionLink("All Comments", "Index", "Comments")</li>
+                    }
+
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

@@ -67,3 +67,7 @@ C:\Users\Spassov\Desktop\C# MVC Project\MvcBlog\MvcBlog\bin\Microsoft.Owin.Secur
 C:\Users\Spassov\Desktop\C# MVC Project\MvcBlog\MvcBlog\obj\Debug\MvcBlog.csprojResolveAssemblyReference.cache
 C:\Users\Spassov\Desktop\C# MVC Project\MvcBlog\MvcBlog\obj\Debug\MvcBlog.dll
 C:\Users\Spassov\Desktop\C# MVC Project\MvcBlog\MvcBlog\obj\Debug\MvcBlog.pdb
+C:\Users\Spassov\Desktop\C# MVC Project\MvcBlog\MvcBlog\bin\PagedList.dll
+C:\Users\Spassov\Desktop\C# MVC Project\MvcBlog\MvcBlog\bin\PagedList.Mvc.dll
+C:\Users\Spassov\Desktop\C# MVC Project\MvcBlog\MvcBlog\bin\PagedList.xml
+C:\Users\Spassov\Desktop\C# MVC Project\MvcBlog\MvcBlog\bin\PagedList.Mvc.xml
